@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.29.1
+
+- Stop permanent Serve and Funnel validation failures from producing an S6
+  restart storm.
+- Report the actual Home Assistant HTTP status and provide actionable guidance
+  when Home Assistant rejects the reverse-proxy test.
+- Document the Home Assistant 2026.8 pending HTTP configuration confirmation,
+  including its five-minute deadline.
+- Add regression coverage for HTTP, HTTPS, unavailable, and rejected Home
+  Assistant backends.
+
 ## 0.29.0
 
 - Publish the first installable release of liliainbloom's Fork.

@@ -321,10 +321,16 @@ More information: [Enabling HTTPS][tailscale_info_https],
 1. Home Assistant, by default, blocks requests from reverse proxies, like the
    Tailscale Serve. To enable it, go to **Settings** -> **System** ->
    **Network** -> **HTTP server** -> **Reverse proxy** and edit the options
-   below (don't forget to restart Home Assistant after the changes are saved):
+   below:
    - Enable `Trust X-Forwarded-For` option.
 
    - Add "127.0.0.1" to the `Trusted proxies` option.
+
+   Saving these HTTP server changes restarts Home Assistant. In Home Assistant
+   2026.8 and newer, reconnect after the restart and select **Confirm** in the
+   pending HTTP configuration dialog within five minutes. If it is not
+   confirmed, Home Assistant automatically restores the previous settings and
+   Tailscale Serve will continue to be rejected.
 
 1. Navigate to the [DNS page][tailscale_dns] of the admin console:
    - Choose a tailnet name.
