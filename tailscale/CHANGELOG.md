@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.29.2
+
+- Update Tailscale from `1.102.2` to `1.102.3`.
+
 ## 0.29.1
 
 - Stop permanent Serve and Funnel validation failures from producing an S6
