@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.29.3
+
+- Update Tailscale from `1.102.3` to `1.102.4`.
+- Update the Alpine `bind-tools` package pin from `9.20.26-r0` to `9.20.27-r0`.
+
 ## 0.29.2
 
 - Update Tailscale from `1.102.2` to `1.102.3`.
