@@ -1,4 +1,8 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base/amd64:21.0.1
+ARG TAILSCALE_VERSION="v1.102.5"
+# hadolint ignore=DL3006
+FROM ghcr.io/tailscale/tailscale:${TAILSCALE_VERSION}@sha256:c507f3a2a6ab1cabd8d809b98edeb41edbd5c3fb6ad9632ffd098b4c7d0b4065 AS tailscale-binaries
+
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
@@ -6,8 +10,6 @@ FROM ${BUILD_FROM}
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base
-ARG BUILD_ARCH=amd64
-ARG TAILSCALE_VERSION="v1.102.4"
 RUN \
     apk add --no-cache \
         bind-tools=9.20.27-r0 \
@@ -24,17 +26,10 @@ RUN \
     && ln -sf /sbin/xtables-nft-multi /sbin/iptables \
     \
     && rm -f -r \
-        /usr/lib/NetworkManager/dispatcher.d \
-    \
-    && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
-    && if [ "${BUILD_ARCH}" = "amd64" ]; then ARCH="amd64"; fi \
-    \
-    && curl -L -s \
-        "https://pkgs.tailscale.com/stable/tailscale_${TAILSCALE_VERSION#v}_${ARCH}.tgz" \
-        | tar zxvf - -C /opt/ --strip-components 1 \
-    \
-    && rm -f -r \
-        /opt/systemd
+        /usr/lib/NetworkManager/dispatcher.d
+
+COPY --from=tailscale-binaries /usr/local/bin/tailscale /opt/tailscale
+COPY --from=tailscale-binaries /usr/local/bin/tailscaled /opt/tailscaled
 
 # Copy root filesystem
 COPY rootfs /

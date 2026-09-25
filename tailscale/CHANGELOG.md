@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.29.4
+
+- Update Tailscale from `1.102.4` to `1.102.5` using the official container
+  image, because the stable binary archives have not been published for this
+  container-only release.
+
 ## 0.29.3
 
 - Update Tailscale from `1.102.3` to `1.102.4`.
