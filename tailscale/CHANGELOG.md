@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.29.5
+
+- Update Tailscale from `1.102.5` to `1.104.1`.
+- Download the Linux binaries from the official stable archives and verify
+  their pinned SHA-256 checksums during the build.
+- Update the Alpine `bind-tools` package pin from `9.20.27-r0` to `9.20.29-r0`.
+
 ## 0.29.4
 
 - Update Tailscale from `1.102.4` to `1.102.5` using the official container

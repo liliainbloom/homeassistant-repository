@@ -1,8 +1,4 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base/amd64:21.0.1
-ARG TAILSCALE_VERSION="v1.102.5"
-# hadolint ignore=DL3006
-FROM ghcr.io/tailscale/tailscale:${TAILSCALE_VERSION}@sha256:c507f3a2a6ab1cabd8d809b98edeb41edbd5c3fb6ad9632ffd098b4c7d0b4065 AS tailscale-binaries
-
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
@@ -10,9 +6,11 @@ FROM ${BUILD_FROM}
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base
+ARG BUILD_ARCH=amd64
+ARG TAILSCALE_VERSION="v1.104.1"
 RUN \
     apk add --no-cache \
-        bind-tools=9.20.27-r0 \
+        bind-tools=9.20.29-r0 \
         dnsmasq=2.92_p2-r0 \
         ethtool=7.0-r0 \
         ipcalc=1.0.3-r1 \
@@ -26,10 +24,25 @@ RUN \
     && ln -sf /sbin/xtables-nft-multi /sbin/iptables \
     \
     && rm -f -r \
-        /usr/lib/NetworkManager/dispatcher.d
-
-COPY --from=tailscale-binaries /usr/local/bin/tailscale /opt/tailscale
-COPY --from=tailscale-binaries /usr/local/bin/tailscaled /opt/tailscaled
+        /usr/lib/NetworkManager/dispatcher.d \
+    \
+    && case "${BUILD_ARCH}" in \
+        amd64) \
+            ARCH="amd64"; \
+            TAILSCALE_SHA256="108d1d96ecf410d305571e173516f27038f870919a9b89c914a167c6d33a4528" ;; \
+        aarch64) \
+            ARCH="arm64"; \
+            TAILSCALE_SHA256="f60294374967f3dfd8cf57bbbd474d6cfce32d123e3a8ddeab82a87940daa806" ;; \
+        *) echo "Unsupported architecture: ${BUILD_ARCH}" >&2; exit 1 ;; \
+    esac \
+    && curl -fsSL \
+        "https://pkgs.tailscale.com/stable/tailscale_${TAILSCALE_VERSION#v}_${ARCH}.tgz" \
+        -o /tmp/tailscale.tgz \
+    && echo "${TAILSCALE_SHA256}  /tmp/tailscale.tgz" | sha256sum -c - \
+    && tar -xzf /tmp/tailscale.tgz -C /opt/ --strip-components=1 \
+        "tailscale_${TAILSCALE_VERSION#v}_${ARCH}/tailscale" \
+        "tailscale_${TAILSCALE_VERSION#v}_${ARCH}/tailscaled" \
+    && rm -f /tmp/tailscale.tgz
 
 # Copy root filesystem
 COPY rootfs /
