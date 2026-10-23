@@ -7,16 +7,16 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base
 ARG BUILD_ARCH=amd64
-ARG TAILSCALE_VERSION="v1.104.1"
+ARG TAILSCALE_VERSION="v1.104.2"
 RUN \
     apk add --no-cache \
-        bind-tools=9.20.29-r0 \
+        bind-tools=9.20.30-r0 \
         dnsmasq=2.92_p2-r0 \
         ethtool=7.0-r0 \
         ipcalc=1.0.3-r1 \
         iproute2=7.0.0-r0 \
         iptables=1.8.13-r0 \
-        nginx=1.30.4-r1 \
+        nginx=1.30.6-r0 \
         coreutils=9.11-r0 \
         networkmanager=1.52.2-r0 \
     \
@@ -29,10 +29,10 @@ RUN \
     && case "${BUILD_ARCH}" in \
         amd64) \
             ARCH="amd64"; \
-            TAILSCALE_SHA256="108d1d96ecf410d305571e173516f27038f870919a9b89c914a167c6d33a4528" ;; \
+            TAILSCALE_SHA256="512f613ed7d04fc7282f7dc5bd76aa105aae28168fbb9357eb749ebcbc29f0ae" ;; \
         aarch64) \
             ARCH="arm64"; \
-            TAILSCALE_SHA256="f60294374967f3dfd8cf57bbbd474d6cfce32d123e3a8ddeab82a87940daa806" ;; \
+            TAILSCALE_SHA256="5776aaa901b5ef1916e66be5bb54b9f481cd399c9c28db123a8cab620efa237b" ;; \
         *) echo "Unsupported architecture: ${BUILD_ARCH}" >&2; exit 1 ;; \
     esac \
     && curl -fsSL \

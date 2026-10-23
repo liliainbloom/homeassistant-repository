@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.29.6
+
+- Update Tailscale from `1.104.1` to `1.104.2` with pinned SHA-256 checksums
+  for the official Linux stable archives.
+- Include the upstream Go `1.27.3` security update that distrusts compromised
+  TLS intermediate certificates, as described in
+  [TS-2026-013](https://tailscale.com/security-bulletins#ts-2026-013).
+- Refresh unavailable Alpine package pins: `bind-tools` from `9.20.29-r0`
+  to `9.20.30-r0`, and `nginx` from `1.30.4-r1` to `1.30.6-r0`.
+
 ## 0.29.5
 
 - Update Tailscale from `1.102.5` to `1.104.1`.

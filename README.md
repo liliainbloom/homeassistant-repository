@@ -24,8 +24,8 @@ Alternatively:
 Run Tailscale on Home Assistant to connect the host and its local networks to a
 tailnet.
 
-- App release: `0.29.5`
-- Tailscale: `1.104.1`
+- App release: `0.29.6`
+- Tailscale: `1.104.2`
 - Architectures: `aarch64`, `amd64`
 - [Documentation](tailscale/DOCS.md)
 - [Source and issue tracker](https://github.com/liliainbloom/homeassistant-app-tailscale)
