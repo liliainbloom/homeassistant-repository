@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.29.7
+
+- Update Tailscale from `1.104.2` to `1.104.4` with pinned SHA-256 checksums
+  for the official Linux stable archives.
+- Include upstream fixes for SSH Unix-socket forwarding and session-memory
+  exhaustion, plus Serve Unix-socket access and HTTP/2 capability isolation
+  ([TS-2026-014 through TS-2026-017](https://tailscale.com/security-bulletins)).
+
 ## 0.29.6
 
 - Update Tailscale from `1.104.1` to `1.104.2` with pinned SHA-256 checksums
