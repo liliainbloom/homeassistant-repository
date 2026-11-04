@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.29.8
+
+- Update Tailscale from `1.104.4` to `1.104.5` with pinned SHA-256 checksums
+  for the official Linux stable archives.
+- Include upstream fixes for SSH/Serve connection stalls on lossy networks,
+  SSH check-approval expiry, and SSH restart/background-task handling.
+
 ## 0.29.7
 
 - Update Tailscale from `1.104.2` to `1.104.4` with pinned SHA-256 checksums
