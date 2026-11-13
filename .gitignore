@@ -1,0 +1,21 @@
+# Runtime diagnostics and local instance data are never source files.
+*.log
+*.log.*
+*.state
+*.state.*
+*.db
+*.db-*
+*.sqlite*
+*.tar
+*.tar.*
+*.tgz
+*.zip
+*.pem
+*.key
+.env
+.env.*
+**/secrets.yaml
+/configuration.yaml
+/options.json
+/private/
+/diagnostics/

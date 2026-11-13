@@ -1,0 +1,28 @@
+# Only runtime source files belong in the image build context.
+*
+!Dockerfile
+!rootfs/
+!rootfs/**
+
+# Exclude runtime data even if it is accidentally placed under rootfs.
+**/*.log
+**/*.log.*
+**/*.state
+**/*.state.*
+**/*.db
+**/*.db-*
+**/*.sqlite*
+**/*.pem
+**/*.key
+**/.env
+**/.env.*
+**/secrets.yaml
+rootfs/data/**
+rootfs/config/**
+rootfs/share/**
+rootfs/media/**
+rootfs/ssl/**
+rootfs/backup/**
+rootfs/run/**
+rootfs/var/log/**
+rootfs/tmp/**

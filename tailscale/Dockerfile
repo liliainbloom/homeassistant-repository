@@ -7,7 +7,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base
 ARG BUILD_ARCH=amd64
-ARG TAILSCALE_VERSION="v1.104.5"
+ARG TAILSCALE_VERSION="v1.104.7"
 RUN \
     apk add --no-cache \
         bind-tools=9.20.30-r0 \
@@ -29,10 +29,10 @@ RUN \
     && case "${BUILD_ARCH}" in \
         amd64) \
             ARCH="amd64"; \
-            TAILSCALE_SHA256="720cbbccbfc03d8b55df72afc19e5a72e31b0f65934700aa6fa38074d4ad7bf7" ;; \
+            TAILSCALE_SHA256="e56693ff74a64f2591b7e819c280635a100aae1ddfb0ef058fcd052b7cd8d16c" ;; \
         aarch64) \
             ARCH="arm64"; \
-            TAILSCALE_SHA256="e900b0e6e25023a1e504b2c237ce2a32ea0535e006f8c1a1097a490886493b6c" ;; \
+            TAILSCALE_SHA256="d6bed2720310b328b861f943d7b4016c5358a9bad60575eb51e8143b79068484" ;; \
         *) echo "Unsupported architecture: ${BUILD_ARCH}" >&2; exit 1 ;; \
     esac \
     && curl -fsSL \

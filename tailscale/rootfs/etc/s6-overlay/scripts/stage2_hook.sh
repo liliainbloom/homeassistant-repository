@@ -28,7 +28,7 @@ function try {
 }
 
 # Load app options, even deprecated one to upgrade
-options=$(bashio::addon.options)
+options=$(bashio::app.options)
 
 # Upgrade configuration from 'proxy', 'funnel' and 'proxy_and_funnel_port' to 'share_homeassistant' and 'share_on_port'
 # This step can be removed in a later version
@@ -38,16 +38,16 @@ proxy_and_funnel_port=$(bashio::jq "${options}" '.proxy_and_funnel_port | select
 # Upgrade to share_homeassistant
 if bashio::var.true "${proxy}"; then
     if bashio::var.true "${funnel}"; then
-        bashio::addon.option 'share_homeassistant' 'funnel'
+        bashio::app.option 'share_homeassistant' 'funnel'
         bashio::log.info "Successfully migrated proxy and funnel options to share_homeassistant: funnel"
     else
-        bashio::addon.option 'share_homeassistant' 'serve'
+        bashio::app.option 'share_homeassistant' 'serve'
         bashio::log.info "Successfully migrated proxy and funnel options to share_homeassistant: serve"
     fi
 fi
 # Upgrade to share_on_port
 if bashio::var.has_value "${proxy_and_funnel_port}"; then
-    try bashio::addon.option 'share_on_port' "^${proxy_and_funnel_port}"
+    try bashio::app.option 'share_on_port' "^${proxy_and_funnel_port}"
     if ((TRY_ERROR)); then
         bashio::log.warning "The proxy_and_funnel_port option value '${proxy_and_funnel_port}' is invalid, proxy_and_funnel_port option is dropped, using default port."
     else
@@ -72,35 +72,35 @@ fi
 # Remove previous options
 if bashio::var.has_value "${proxy}"; then
     bashio::log.info 'Removing deprecated proxy option'
-    bashio::addon.option 'proxy'
+    bashio::app.option 'proxy'
 fi
 if bashio::var.has_value "${funnel}"; then
     bashio::log.info 'Removing deprecated funnel option'
-    bashio::addon.option 'funnel'
+    bashio::app.option 'funnel'
 fi
 if bashio::var.has_value "${proxy_and_funnel_port}"; then
     bashio::log.info 'Removing deprecated proxy_and_funnel_port option'
-    bashio::addon.option 'proxy_and_funnel_port'
+    bashio::app.option 'proxy_and_funnel_port'
 fi
 
 # Rename changed options
 tags=$(bashio::jq "${options}" '.tags | select(.!=null)')
 if bashio::var.has_value "${tags}"; then
-    try bashio::addon.option 'advertise_tags' "^${tags}"
+    try bashio::app.option 'advertise_tags' "^${tags}"
     if ((TRY_ERROR)); then
         bashio::log.warning "The tags option value is invalid, tags option is dropped, using default no advertise_tags."
         bashio::log.warning "The invalid tags option value is: '${tags}'"
     else
         bashio::log.info "Successfully renamed tags option to advertise_tags"
     fi
-    bashio::addon.option 'tags'
+    bashio::app.option 'tags'
 fi
 
 # Remove deprecated share_service_name option
 share_service_name=$(bashio::jq "${options}" '.share_service_name | select(.!=null)')
 if bashio::var.has_value "${share_service_name}"; then
     bashio::log.info 'Removing deprecated share_service_name option'
-    bashio::addon.option 'share_service_name'
+    bashio::app.option 'share_service_name'
 fi
 
 # Home Assistant's local DNS forwarding must not point back to MagicDNS. Doing
@@ -147,12 +147,12 @@ fi
 #
 if bashio::var.true "${userspace_networking}"; then
     # Disable MagicDNS egress and ingress proxy related services when userspace_networking is enabled
-    rm /etc/s6-overlay/s6-rc.d/user/contents.d/magicdns-proxies-reconfigurator
-    rm /etc/s6-overlay/s6-rc.d/user/contents.d/magicdns-ingress-proxy
+    rm /etc/s6-overlay/user-bundles.d/user/contents.d/magicdns-proxies-reconfigurator
+    rm /etc/s6-overlay/user-bundles.d/user/contents.d/magicdns-ingress-proxy
     rm /etc/s6-overlay/s6-rc.d/tailscaled/dependencies.d/magicdns-egress-proxy
 elif bashio::config.false "accept_dns"; then
     # Disable MagicDNS egress and ingress proxy reconfigurator when userspace_networking is disabled but accept_dns is also disabled
-    rm /etc/s6-overlay/s6-rc.d/user/contents.d/magicdns-proxies-reconfigurator
+    rm /etc/s6-overlay/user-bundles.d/user/contents.d/magicdns-proxies-reconfigurator
 fi
 
 # Disable protect-subnets service when userspace-networking is enabled or accepting routes is disabled
@@ -169,20 +169,20 @@ fi
 
 # Disable forwarding service when userspace-networking is enabled
 if bashio::var.true "${userspace_networking}"; then
-    rm /etc/s6-overlay/s6-rc.d/user/contents.d/forwarding
+    rm /etc/s6-overlay/user-bundles.d/user/contents.d/forwarding
 fi
 
 # Disable mss-clamping service when userspace-networking is enabled
 if bashio::var.true "${userspace_networking}"; then
-    rm /etc/s6-overlay/s6-rc.d/user/contents.d/mss-clamping
+    rm /etc/s6-overlay/user-bundles.d/user/contents.d/mss-clamping
 fi
 
 # Disable taildrop service when it has been explicitly disabled
 if bashio::config.false 'taildrop'; then
-    rm /etc/s6-overlay/s6-rc.d/user/contents.d/taildrop
+    rm /etc/s6-overlay/user-bundles.d/user/contents.d/taildrop
 fi
 
 # Disable share-homeassistant service when it has been explicitly disabled
 if bashio::config.equals 'share_homeassistant' 'disabled'; then
-    rm /etc/s6-overlay/s6-rc.d/user/contents.d/share-homeassistant
+    rm /etc/s6-overlay/user-bundles.d/user/contents.d/share-homeassistant
 fi

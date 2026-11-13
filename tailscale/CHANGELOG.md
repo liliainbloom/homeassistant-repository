@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.29.9
+
+- Update Tailscale from `1.104.5` to `1.104.7` with pinned SHA-256 checksums.
+- Include upstream TLS compatibility and dormant-connection fixes.
+- Replace deprecated Bashio aliases with the supported app functions.
+- Migrate the S6 user bundle and conditional service pruning to the supported
+  bundle directory, preserving the service dependency graph.
+- Add synthetic startup regression coverage and exclude local diagnostics
+  from Git and Docker build contexts.
+
 ## 0.29.8
 
 - Update Tailscale from `1.104.4` to `1.104.5` with pinned SHA-256 checksums
